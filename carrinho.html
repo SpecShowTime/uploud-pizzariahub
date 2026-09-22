@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrinho | Pizza Hub</title>
+  <style>
+    :root { --vermelho: #c62828; --escuro: #241a17; --fundo: #fff8f0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; color: var(--escuro); background: var(--fundo); }
+    header { padding: 22px 6%; color: white; background: var(--vermelho); display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    header h1 { margin: 0; font-size: 1.6rem; }
+    header a { color: white; text-decoration: none; font-weight: bold; }
+    main { width: min(900px, 92%); margin: 32px auto; }
+    .carrinho { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 3px 14px #00000012; }
+    .item { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid #eee; }
+    .item:last-child { border-bottom: 0; }
+    .item img { width: 78px; height: 78px; object-fit: cover; border-radius: 8px; background: #eee; }
+    .info { flex: 1; }
+    .info h3, .info p { margin: 4px 0; }
+    .preco { font-weight: bold; white-space: nowrap; }
+    .quantidade { display: flex; align-items: center; gap: 10px; }
+    button { border: 0; border-radius: 6px; cursor: pointer; padding: 8px 12px; font-weight: bold; }
+    .qtd { color: var(--vermelho); background: #fde7e0; }
+    .remover { color: #a01818; background: transparent; font-size: .9rem; }
+    .resumo { text-align: right; margin-top: 20px; padding-top: 18px; border-top: 2px solid #eee; }
+    .total { font-size: 1.35rem; font-weight: bold; }
+    .finalizar { color: white; background: var(--vermelho); margin-top: 12px; padding: 12px 22px; }
+    .cliente { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; text-align: left; }
+    .cliente label { display: grid; gap: 6px; font-weight: bold; }
+    .cliente input, .cliente textarea { width: 100%; border: 1px solid #ddd; border-radius: 6px; padding: 10px; font: inherit; }
+    .cliente .campo-largo { grid-column: 1 / -1; }
+    .vazio { text-align: center; padding: 45px 10px; }
+    .vazio a { color: var(--vermelho); font-weight: bold; }
+    @media (max-width: 560px) { .item { flex-wrap: wrap; } .preco { margin-left: auto; } .cliente { grid-template-columns: 1fr; } .cliente .campo-largo { grid-column: auto; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🍕 Pizza Hub — Meu carrinho</h1>
+    <a href="cardapio.html">Escolher pizza manualmente</a>
+  </header>
+
+  <main>
+    <section class="carrinho" aria-live="polite">
+      <div id="lista"></div>
+      <div id="vazio" class="vazio" hidden>
+        <p>Seu carrinho está vazio.</p>
+        <a href="cardapio.html">Escolher pizza manualmente</a>
+      </div>
+      <div id="resumo" class="resumo" hidden>
+        <div class="total">Total: <span id="total">R$ 0,00</span></div>
+        <div class="cliente">
+          <label>Nome <input id="nomeCliente" required autocomplete="name" placeholder="Seu nome"></label>
+          <label>Telefone <input id="telefoneCliente" required autocomplete="tel" placeholder="(00) 00000-0000"></label>
+          <label class="campo-largo">Endereço de entrega <textarea id="enderecoCliente" required rows="2" autocomplete="street-address" placeholder="Rua, número e bairro"></textarea></label>
+        </div>
+        <button class="finalizar" id="finalizar" type="button">Finalizar pedido no WhatsApp</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Aceita o carrinho salvo como "carrinho" ou "cart" pelo cardápio.
+    const CHAVE = localStorage.getItem('carrinho') !== null ? 'carrinho' : 'cart';
+    let itens = JSON.parse(localStorage.getItem(CHAVE) || '[]');
+    const dinheiro = valor => Number(valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    function salvar() { localStorage.setItem(CHAVE, JSON.stringify(itens)); renderizar(); }
+    function renderizar() {
+      const lista = document.getElementById('lista');
+      const vazio = document.getElementById('vazio');
+      const resumo = document.getElementById('resumo');
+      lista.innerHTML = '';
+      vazio.hidden = itens.length > 0;
+      resumo.hidden = itens.length === 0;
+      let total = 0;
+      itens.forEach((item, indice) => {
+        item.quantidade = Math.max(1, Number(item.quantidade || item.qty || 1));
+        const preco = Number(item.preco ?? item.price ?? 0);
+        total += preco * item.quantidade;
+        const linha = document.createElement('article');
+        linha.className = 'item';
+        linha.innerHTML = `<img src="${item.imagem || item.image || ''}" alt="${item.nome || item.name || 'Produto'}">
+          <div class="info"><h3>${item.nome || item.name || 'Produto'}</h3><p>${dinheiro(preco)} cada</p></div>
+          <div class="quantidade"><button class="qtd" data-acao="menos">−</button><strong>${item.quantidade}</strong><button class="qtd" data-acao="mais">+</button></div>
+          <strong class="preco">${dinheiro(preco * item.quantidade)}</strong>
+          <button class="remover" data-acao="remover">Remover</button>`;
+        linha.querySelectorAll('button').forEach(botao => botao.onclick = () => {
+          if (botao.dataset.acao === 'mais') item.quantidade++;
+          if (botao.dataset.acao === 'menos') item.quantidade--;
+          if (botao.dataset.acao === 'remover' || item.quantidade < 1) itens.splice(indice, 1);
+          salvar();
+        });
+        lista.appendChild(linha);
+      });
+      document.getElementById('total').textContent = dinheiro(total);
+    }
+    document.getElementById('finalizar').onclick = () => {
+      const nome = document.getElementById('nomeCliente');
+      const telefone = document.getElementById('telefoneCliente');
+      const endereco = document.getElementById('enderecoCliente');
+      if (!nome.value.trim() || !telefone.value.trim() || !endereco.value.trim()) {
+        [nome, telefone, endereco].forEach(campo => campo.reportValidity());
+        return;
+      }
+      const total = itens.reduce((soma, item) => {
+        return soma + Number(item.preco ?? item.price ?? 0) * Number(item.quantidade || item.qty || 1);
+      }, 0);
+      const resumo = itens.map(item => {
+        const nomeItem = item.nome || item.name || 'Produto';
+        const quantidade = Number(item.quantidade || item.qty || 1);
+        const preco = Number(item.preco ?? item.price ?? 0);
+        return `${quantidade}x ${nomeItem} — ${dinheiro(preco * quantidade)}`;
+      }).join('\n');
+      const mensagem = `🍕 NOVO PEDIDO — PIZZA HUB
+
+👤 CLIENTE
+Nome: ${nome.value.trim()}
+Telefone: ${telefone.value.trim()}
+
+📍 ENTREGA
+${endereco.value.trim()}
+
+🍕 PEDIDO
+${resumo}
+
+💰 TOTAL: ${dinheiro(total)}
+
+Aguardo confirmação. Obrigado!`;
+
+      const pedido = {
+        cliente: { nome: nome.value.trim(), telefone: telefone.value.trim(), endereco: endereco.value.trim() },
+        itens,
+        total,
+        criadoEm: new Date().toISOString()
+      };
+      localStorage.setItem('ultimoPedido', JSON.stringify(pedido));
+      window.location.href = 'https://wa.me/5585987382998?text=' + encodeURIComponent(mensagem);
+    };
+    renderizar();
+  </script>
+</body>
+</html>

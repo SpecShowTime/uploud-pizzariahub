@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cardápio da Pizzaria Hub — sabor, qualidade e bons momentos.">
+    <title>Cardápio | Pizzaria Hub</title>
+    <style>
+        :root{--red:#e3262e;--green:#24a148;--dark:#090b0a;--card:#151816;--cream:#fff8e8}
+        *{box-sizing:border-box}body{margin:0;color:var(--cream);background:var(--dark);font-family:Arial,sans-serif;position:relative;isolation:isolate}
+        body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(135deg,#090b0aee 8%,#090b0a9c 48%,#101d13e8),url("https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=2200&q=80") center/cover no-repeat;opacity:.62;filter:saturate(.72) contrast(1.08)}
+        body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at 50% 18%,#31593630,transparent 38%),linear-gradient(115deg,transparent 20%,#ffffff08 50%,transparent 80%);backdrop-filter:blur(2px)}
+        header{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:26px 7%;text-align:left;background:linear-gradient(135deg,#080908 55%,#121e14);border-bottom:4px solid var(--red)}
+        .logo{color:var(--red);font-size:clamp(2rem,5vw,3.5rem);font-weight:900;letter-spacing:2px;margin:0}.logo span{color:var(--green)}
+        nav{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:10px}
+        nav a{color:var(--cream);text-decoration:none;margin:0 6px;font-weight:bold}nav a:hover{color:var(--green)}
+        .social-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);transition:.2s ease}
+        .social-btn:hover{background:rgba(36,161,72,0.18);border-color:rgba(36,161,72,0.4)}
+        @media (max-width:600px){header{flex-wrap:wrap}.logo{width:100%}nav{width:100%;justify-content:flex-start}}
+        .hero{padding:75px 7%;text-align:center;background:radial-gradient(circle at center,#1d3020,var(--dark) 65%)}
+        .hero h1{margin:0 0 14px;font-size:clamp(2rem,6vw,4.5rem)}.hero h1 strong{color:var(--red)}.hero p{font-size:1.2rem;color:#d8dfd9}
+        .button{display:inline-block;padding:14px 24px;margin-top:15px;border-radius:30px;color:white;background:var(--green);text-decoration:none;font-weight:bold}
+        main{width:min(1100px,90%);margin:45px auto}.section-title{text-align:center;color:var(--green);font-size:2rem;margin-bottom:28px}
+        .menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}.item{overflow:hidden;background:var(--card);border:1px solid #29342b;border-radius:14px;box-shadow:0 8px 20px #0008}
+        .category{margin: bottom 60px;px}.category-title{color:var(--red);font-size:1.8rem;border-bottom:2px solid var(--green);padding-bottom:10px}.category-help{color:#cbd2cc}.choice{display:grid;gap:12px;margin-top:14px}.choice label{display:flex;align-items:center;gap:10px;padding:12px;background:#1d241f;border-radius:8px}.choice input,.choice select{accent-color:var(--green)}.choice select{margin-left:auto;padding:8px;border-radius:6px;background:#fff8e8;color:#090b0a}.quantity{width:70px;margin-left:auto;padding:8px;border-radius:6px;border:0}.order-summary{padding:24px;background:#111c13;border:2px solid var(--green);border-radius:16px}.order-summary h2{margin-top:0;color:var(--green)}#summary{white-space:pre-line;line-height:1.6;color:#e8eee9}.total{font-size:1.35rem;font-weight:bold;color:var(--green)}
+        .item img{display:block;width:100%;height:190px;object-fit:cover}.item-content{padding:18px}.item h3{margin:0 0 8px;color:var(--red)}.item p{min-height:42px;color:#cbd2cc}.price{color:var(--green);font-size:1.2rem;font-weight:bold}
+        .image-button{display:block;width:100%;padding:10px;margin-top:12px;border:0;border-radius:8px;color:white;background:var(--red);font-weight:bold;cursor:pointer}.image-button:hover{background:#b91d24}
+        .image-modal{display:none;position:fixed;z-index:10;inset:0;padding:40px 20px;background:#000d;align-items:center;justify-content:center}.image-modal.open{display:flex}.image-modal img{max-width:90vw;max-height:85vh;border-radius:12px;box-shadow:0 8px 30px #000}.close-modal{position:absolute;top:18px;right:28px;border:0;background:none;color:white;font-size:2.5rem;cursor:pointer}
+        .contact{margin-top:55px;padding:32px;text-align:center;background:#111c13;border-radius:16px;border-top:4px solid var(--red)}.contact a{color:var(--cream);font-weight:bold}.four-flavor-box{margin-top:12px;padding:14px;border:1px solid #29342b;border-radius:10px;background:#111c13;display:grid;gap:9px}.four-flavor-box[hidden]{display:none}.four-flavor-box strong{color:var(--green)}.four-flavor-box select{width:100%;padding:10px;border-radius:8px;border:1px solid #39453c;background:#0d120e;color:#f4f1e8}.four-flavor-box small{color:#aeb8b0}.pizza-list{margin-top:18px}.pizza-row{display:flex;justify-content:space-between;gap:12px;padding:10px;border-bottom:1px solid #29342b}.remove{border:0;border-radius:6px;background:var(--red);color:#fff;cursor:pointer}
+        .delivery-note{margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(227,38,46,.12);border:1px solid rgba(227,38,46,.35);color:#ffd8d8;font-weight:bold;text-align:center}
+        footer{padding:24px;text-align:center;color:#aeb8b0;border-top:1px solid #253026}
+    </style>
+</head>
+<body>
+    
+    <header>
+        <p class="logo">PIZZARIA <span>HUB</span></p>
+        <nav aria-label="Menu principal">
+            <a href="cardapio.html">Cardápio</a>
+            <a href="#contato">Contato</a>
+            <a class="social-btn" href="https://www.instagram.com/pizzahubcrateus" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
+            <a class="social-btn" href="https://linktr.ee/pizzahubcrateus" target="_blank" rel="noopener noreferrer">🔗 Linktree</a>
+        </nav>
+    </header>
+    <section class="hero"><h1>Bem-vindo à <strong>Pizzaria Hub!</strong></h1><p>O sabor que reúne todo mundo. Escolha sua pizza e aproveite!</p><a class="button" href="cardapio.html">Ver nosso cardápio</a></section>
+    <main><section id="cardapio"><h2 class="section-title">Monte seu pedido</h2>
+        <section class="category"><h2 class="category-title">🍕 Pizzas</h2><p class="category-help">Escolha uma das 16 opções, o tamanho e a borda. Você pode adicionar várias pizzas ao mesmo pedido.</p><div class="choice"><label>Sabor <select id="pizza"><option value="Frango Catupiry" data-p="32.90" data-m="39.90" data-g="49.90">Frango Catupiry</option><option value="Portuguesa" data-p="32.90" data-m="39.90" data-g="45.90">Portuguesa</option><option value="Mussarela" data-p="29.90" data-m="34.90" data-g="39.90">Mussarela</option><option value="Monte sua pizza — 4 sabores" data-p="49.90" data-m="54.90" data-g="59.90">Monte sua pizza — 4 sabores</option><option value="Bacon" data-p="32.90" data-m="38.90" data-g="44.90">Bacon</option><option value="Nordestina" data-p="39.90" data-m="44.90" data-g="51.90
+
+Os dois PDFs são páginas complementares do mesmo cardápio. Os tamanhos são P, M e G.
+
+Página 1 — Pizzas
+🍕 Frango Catupiry
+P: R$ 32,90
+M: R$ 39,90
+G: R$ 49,90
+
+Ingredientes: frango, catupiry, mussarela, cebola, orégano, milho e molho toque do chefe.
+
+🍕 Portuguesa
+P: R$ 32,90
+M: R$ 39,90
+G: R$ 45,90
+
+Ingredientes: mussarela, presunto, ovos, pimentão, tomate, cebola, ervilha, azeitona, orégano e molho toque do chefe.
+
+🍕 Mussarela
+P: R$ 29,90
+M: R$ 34,90
+G: R$ 39,90
+
+Ingredientes: mussarela, azeite, orégano e molho toque do chefe.
+
+🍕 Monte sua pizza — 4 sabores
+P: R$ 49,90
+M: R$ 54,90
+G: R$ 59,90
+
+Opção: escolha 4 sabores e monte sua pizza.
+
+🍕 Bacon
+P: R$ 32,90
+M: R$ 38,90
+G: R$ 44,90
+
+Ingredientes: mussarela, bacon, milho, azeitona, cebola, orégano e molho toque do chefe.
+
+🍕 Nordestina
+P: R$ 39,90
+M: R$ 44,90
+G: R$ 51,90
+
+Ingredientes: carne de sol, mussarela, pimenta, cream cheese e molho toque do chefe.
+
+🍫 Ferrero Rocher
+P: R$ 74,90
+M: R$ 84,90
+G: R$ 89,90
+
+A arte não apresenta uma descrição textual de ingredientes.
+
+🍫 Chocolate Branco
+P: R$ 34,90
+M: R$ 44,90
+G: R$ 49,90
+
+A arte não apresenta uma descrição textual de ingredientes.
+
+🍕 Página 2 — Pizzas
+🍕 Carneiro
+P: R$ 39,90
+M: R$ 54,90
+G: R$ 59,90
+
+Ingredientes: filé de carneiro, mussarela, queijo coalho, cebola, azeitona e molho toque do chef.
+
+🍕 Camarão
+P: R$ 39,90
+M: R$ 54,90
+G: R$ 59,90
+
+Ingredientes: camarão em filé, orégano, mussarela e molho toque do chefe.
+
+🍕 Carne de Sol
+P: R$ 34,90
+M: R$ 39,90
+G: R$ 46,90
+
+Ingredientes: carne de sol, mussarela, cebola, tomate, molho toque do chefe.
+
+🍕 Frango
+P: R$ 29,90
+M: R$ 34,90
+G: R$ 42,90
+
+Ingredientes: frango, mussarela, milho, azeitona, orégano e molho toque do chefe.
+
+🍕 Calabresa
+P: R$ 29,90
+M: R$ 34,90
+G: R$ 44,90
+
+Ingredientes: calabresa, mussarela, cebola, orégano, azeitona e molho toque do chefe.
+
+🍕 4 Queijos
+P: R$ 29,90
+M: R$ 34,90
+G: R$ 49,90
+
+Ingredientes: mussarela, parmesão, requeijão, gorgonzola, azeitona, orégano e molho toque do chefe.
+
+🍫 Nutella
+P: R$ 39,90
+M: R$ 59,90
+G: R$ 69,90
+
+A arte não apresenta descrição textual dos ingredientes.
+
+🍯 Doce de Leite
+P: R$ 29,90
+M: R$ 39,90
+G: R$ 44,90
+
+A arte não apresenta descrição textual dos ingredientes.
+
+🥤 BEBIDAS — PDF
+
+A parte visível da arte confirma:
+
+Refrigerante 1,5 L
+Coca Cola — R$ 14,99
+Coca Cola Zero — R$ 14,99
+Refrigerante 1 L
+Coca Cola — R$ 12,99
+Coca Cola Zero — R$ 12,99
+Guaraná — R$ 8,90
+Cajuína — R$ 13,90
+Lata
+Coca Cola — R$ 5,99
+Coca Cola Zero — R$ 5,99
+Guaraná — R$ 5,99
+Guaraná Zero — R$ 5,99
+Cajuína — R$ 5,99
+Sprite Zero — R$ 5,99
+Fanta Uva — R$ 5,99
+Fanta Laranja — R$ 5,99">Nordestina</option><option value="Ferrero Rocher" data-p="74.90" data-m="84.90" data-g="89.90">Ferrero Rocher</option><option value="Chocolate Branco" data-p="34.90" data-m="44.90" data-g="49.90">Chocolate Branco</option><option value="Carneiro" data-p="39.90" data-m="54.90" data-g="59.90">Carneiro</option><option value="Camarão" data-p="39.90" data-m="54.90" data-g="59.90">Camarão</option><option value="Carne de Sol" data-p="34.90" data-m="39.90" data-g="46.90">Carne de Sol</option><option value="Frango" data-p="29.90" data-m="34.90" data-g="42.90">Frango</option><option value="Calabresa" data-p="29.90" data-m="34.90" data-g="44.90">Calabresa</option><option value="4 Queijos" data-p="29.90" data-m="34.90" data-g="49.90">4 Queijos</option><option value="Nutella" data-p="39.90" data-m="59.90" data-g="69.90">Nutella</option><option value="Doce de Leite" data-p="29.90" data-m="39.90" data-g="44.90">Doce de Leite</option></select></label><label>Tamanho <select id="size"><option value="P">P</option><option value="M" selected>M</option><option value="G">G</option></select></label><div id="fourFlavorBox" class="four-flavor-box" hidden>
+  <strong>🍕 Escolha os 4 sabores:</strong>
+  <select class="four-flavor" aria-label="1º sabor"></select>
+  <select class="four-flavor" aria-label="2º sabor"></select>
+  <select class="four-flavor" aria-label="3º sabor"></select>
+  <select class="four-flavor" aria-label="4º sabor"></select>
+  <small>Selecione 4 sabores diferentes para montar sua pizza.</small>
+</div></div></section>
+        <section class="category"><h2 class="category-title">🧀 Borda</h2><div class="choice"><label><input type="radio" name="edge" value="Sem borda recheada" checked> Sem borda recheada</label><label><input type="radio" name="edge" value="Cheddar"> Cheddar</label><label><input type="radio" name="edge" value="Cream cheese"> Cream cheese</label><label><input type="radio" name="edge" value="Mussarela"> Mussarela</label><label><input type="radio" name="edge" value="Chocolate"> Chocolate</label><label><input type="radio" name="edge" value="Chocolate branco"> Chocolate branco</label><label><input type="radio" name="edge" value="Nutella"> Nutella</label></div><button class="button" id="addPizza" type="button">Adicionar pizza</button><div class="pizza-list" id="pizzaList"></div></section>
+        <section class="category"><h2 class="category-title">🥫 Maionese</h2><div class="choice"><label><input type="checkbox" id="mayo" data-price="3.90"> Maionese temperada — R$ 3,90 <input class="quantity" id="mayoQty" type="number" min="1" value="1"></label></div></section>
+        <section class="category">
+<h2 class="category-title">🥟 Esfirras</h2>
+<p class="category-help">Escolha as esfirras e informe a quantidade.</p>
+<div class="choice" id="sfiras">
+<label><input class="sfira" type="checkbox" data-name="Calabresa" data-price="11.99"> Calabresa — R$ 11,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Frango" data-price="11.99"> Frango — R$ 11,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Mussarela" data-price="11.99"> Mussarela — R$ 11,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Carne de sol" data-price="15.99"> Carne de sol — R$ 15,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="4 queijos" data-price="15.99"> 4 queijos — R$ 15,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Bacon" data-price="15.99"> Bacon — R$ 15,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Portuguesa" data-price="15.99"> Portuguesa — R$ 15,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Nordestina" data-price="15.99"> Nordestina — R$ 15,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Frango catupiry" data-price="15.99"> Frango catupiry — R$ 15,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Nutella" data-price="17.99"> Nutella — R$ 17,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Ferreira rocher" data-price="17.99"> Ferreira rocher — R$ 17,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Camarão" data-price="17.99"> Camarão — R$ 17,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Carneiro" data-price="17.99"> Carneiro — R$ 17,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Chocolate" data-price="12.99"> Chocolate — R$ 12,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Chocolate branco" data-price="12.99"> Chocolate branco — R$ 12,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Doce de leite" data-price="12.99"> Doce de leite — R$ 12,99 <input class="quantity" type="number" min="1" value="1"></label>
+<label><input class="sfira" type="checkbox" data-name="Chocolate duo" data-price="12.99"> Chocolate duo — R$ 12,99 <input class="quantity" type="number" min="1" value="1"></label>
+</div>
+</section>
+<section class="category"><h2 class="category-title">🥤 Bebidas</h2><div class="choice" id="drinks"></div></section>
+        <section class="order-summary"><h2>🛒 Resumo do pedido</h2><div id="summary"></div><p class="total" id="total"></p><div class="delivery-note">⚠️ Taxa de entrega fixa não inclusa ao valor final do pedido.</div><button class="button" id="whatsapp" type="button">Finalizar pedido no WhatsApp</button></section>
+    </section><section id="contato" class="contact"><h2>Faça seu pedido</h2><p>Fale com a gente e receba seu sabor favorito em casa!</p><p>📞 <a href="tel:+5585987382998">(85) 98738-2998</a> | <a href="https://wa.me/5585987382998" target="_blank" rel="noopener">WhatsApp</a></p><p>📍 Av. Tab. Edmar Lopes Martins, 242 -<br>Morada dos Ventos 2</p><p class="delivery-note">⚠️ Taxa de entrega fixa não inclusa no valor total do pedido.</p></section></main>
+    <footer>© 2024 Pizzaria Hub — Feito com sabor.</footer>
+    <div class="image-modal" id="imageModal" role="dialog" aria-modal="true" aria-label="Imagem ampliada"><button class="close-modal" type="button" aria-label="Fechar">&times;</button><img id="modalImage" src="" alt=""></div>
+    
+    
+    <script>
+const money = v => Number(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const pizzas = [];
+const pizzaEl = document.getElementById('pizza');
+const sizeEl = document.getElementById('size');
+const pizzaListEl = document.getElementById('pizzaList');
+const summaryEl = document.getElementById('summary');
+const totalEl = document.getElementById('total');
+const fourFlavorBox = document.getElementById('fourFlavorBox');
+const fourFlavorEls = [...document.querySelectorAll('.four-flavor')];
+const pizzaOptions = [...pizzaEl.options]
+  .filter(o => o.value !== 'Monte sua pizza — 4 sabores')
+  .map(o => o.value);
+
+function setupFourFlavorSelectors(){
+  const options = '<option value="">Selecione um sabor</option>' +
+    pizzaOptions.map(name => `<option value="${name}">${name}</option>`).join('');
+  fourFlavorEls.forEach(el => {
+    el.innerHTML = options;
+    el.addEventListener('change', updateFourFlavorAvailability);
+  });
+}
+
+function updateFourFlavorAvailability(){
+  const chosen = fourFlavorEls.map(el => el.value).filter(Boolean);
+  fourFlavorEls.forEach(current => {
+    const value = current.value;
+    [...current.options].forEach(opt => {
+      if(!opt.value) return;
+      opt.disabled = opt.value !== value && chosen.includes(opt.value);
+    });
+  });
+}
+
+function toggleFourFlavorBox(){
+  const isFour = pizzaEl.value === 'Monte sua pizza — 4 sabores';
+  fourFlavorBox.hidden = !isFour;
+  if(!isFour) {
+    fourFlavorEls.forEach(el => el.value='');
+    updateFourFlavorAvailability();
+  }
+}
+
+
+const drinkData = [
+ ['Coca Cola 1,5 L',14.99],['Coca Cola Zero 1,5 L',14.99],
+ ['Coca Cola 1 L',12.99],['Coca Cola Zero 1 L',12.99],
+ ['Guaraná 1 L',8.90],['Cajuína 1 L',13.90],
+ ['Coca Cola lata',5.99],['Coca Cola Zero lata',5.99],
+ ['Guaraná lata',5.99],['Guaraná Zero lata',5.99],
+ ['Cajuína lata',5.99],['Sprite Zero lata',5.99],
+ ['Fanta Uva lata',5.99],['Fanta Laranja lata',5.99]
+];
+
+document.getElementById('drinks').innerHTML = drinkData.map(d =>
+ `<label><input class="drink" type="checkbox" data-name="${d[0]}" data-price="${d[1]}">
+ ${d[0]} — ${money(d[1])}
+ <input class="quantity" type="number" min="1" value="1"></label>`
+).join('');
+
+const edgePrices = {
+ 'Cheddar':[13.90,16.90,20.90],
+ 'Cream cheese':[13.90,16.90,20.90],
+ 'Mussarela':[13.90,16.90,20.90],
+ 'Chocolate':[15.90,17.90,19.90],
+ 'Chocolate branco':[15.90,17.90,19.90],
+ 'Nutella':[22.90,24.90,27.90]
+};
+
+function edgePrice(name, size){
+ const sizes = ['P','M','G'];
+ return edgePrices[name]?.[sizes.indexOf(size)] ?? 0;
+}
+
+function renderPizzas(){
+ pizzaListEl.innerHTML = pizzas.length
+   ? pizzas.map((p,i) => `
+      <div class="pizza-row">
+        <span>Pizza ${i+1}: ${p.flavor}${p.flavors ? ' — '+p.flavors : ''} | ${p.size} | Borda: ${p.edge} — ${money(p.price)}</span>
+        <button class="remove" type="button" data-i="${i}">Remover</button>
+      </div>`).join('')
+   : '<p class="category-help">Nenhuma pizza adicionada ainda.</p>';
+
+ pizzaListEl.querySelectorAll('.remove').forEach(btn => {
+   btn.addEventListener('click', () => {
+     pizzas.splice(Number(btn.dataset.i),1);
+     renderPizzas();
+     update();
+   });
+ });
+}
+
+function collectExtras(className, title, lines, state){
+ document.querySelectorAll('.'+className+':checked').forEach(x => {
+   const q = Math.max(1, Number(x.parentElement.querySelector('.quantity').value) || 1);
+   const subtotal = q * Number(x.dataset.price);
+   state.total += subtotal;
+   lines.push(`• ${q}x ${x.dataset.name} (${money(subtotal)})`);
+ });
+ if(lines.length) state.sections.push('', title+':', ...lines);
+}
+
+function update(){
+ const state = {total:0, sections:[]};
+
+ pizzas.forEach((p,i) => {
+   state.total += p.price;
+   let line = `🍕 Pizza ${i+1}: ${p.flavor}`;
+   if(p.flavors) line += ` — Sabores: ${p.flavors}`;
+   line += ` | Tamanho: ${p.size} | Borda: ${p.edge}`;
+   if(p.edgePrice > 0) line += ` (${money(p.edgePrice)})`;
+   line += ` — ${money(p.price)}`;
+   state.sections.push(line);
+ });
+
+ const mayo = document.getElementById('mayo');
+ if(mayo.checked){
+   const q = Math.max(1, Number(document.getElementById('mayoQty').value) || 1);
+   const subtotal = q * 3.90;
+   state.total += subtotal;
+   state.sections.push('',`🥫 Maionese: ${q}x (${money(subtotal)})`);
+ }
+
+ collectExtras('sfira','🥟 Esfirras',[],state);
+ collectExtras('drink','🥤 Bebidas',[],state);
+
+ summaryEl.textContent = state.sections.length
+   ? state.sections.join('\n')
+   : 'Seu pedido está vazio.';
+ totalEl.textContent = '💰 Total: ' + money(state.total);
+ return {text:state.sections.join('\n'), total:state.total};
+}
+
+document.getElementById('addPizza').addEventListener('click',()=>{
+ const selected = pizzaEl.selectedOptions[0];
+ const flavor = selected.value;
+ const size = sizeEl.value;
+ const edge = document.querySelector('input[name="edge"]:checked').value;
+ const base = Number(selected.dataset[size.toLowerCase()]);
+ const ep = edgePrice(edge,size);
+
+ let flavors = '';
+ if(flavor === 'Monte sua pizza — 4 sabores'){
+   const list = fourFlavorEls.map(el => el.value);
+   if(list.some(v => !v)){
+     alert('Escolha os 4 sabores da pizza antes de adicionar.');
+     return;
+   }
+   if(new Set(list).size !== 4){
+     alert('Escolha 4 sabores diferentes para montar sua pizza.');
+     return;
+   }
+   flavors = list.join(', ');
+ }
+
+ pizzas.push({
+   flavor,size,edge,edgePrice:ep,price:base+ep,flavors
+ });
+
+ fourFlavorEls.forEach(el => el.value='');
+ updateFourFlavorAvailability();
+ renderPizzas();
+ update();
+});
+
+document.querySelectorAll('input,select').forEach(el => {
+ el.addEventListener('input',update);
+ el.addEventListener('change',update);
+});
+
+pizzaEl.addEventListener('change', () => {
+ toggleFourFlavorBox();
+ update();
+});
+
+setupFourFlavorSelectors();
+toggleFourFlavorBox();
+
+document.getElementById('whatsapp').addEventListener('click',()=>{
+ const order = update();
+ if(!order.text){
+   alert('Adicione pelo menos um item ao pedido antes de finalizar.');
+   return;
+ }
+ const message =
+   'Olá! Gostaria de fazer este pedido:\\n\\n' +
+   order.text +
+   '\\n\\n💰 Total: ' + money(order.total);
+ location.href = 'https://wa.me/5585987382998?text=' + encodeURIComponent(message);
+});
+
+renderPizzas();
+update();
+</script>
+</body>
+</html>

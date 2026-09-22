@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pizza Hub | Cardápio</title>
+  <style>
+    :root {
+      --vermelho: #d62828;
+      --vermelho-escuro: #9d1a1a;
+      --bege: #fff4df;
+      --texto: #321b12;
+      --cinza: #666;
+      --borda: #ead6b8;
+      --branco: #fff;
+      --dourado: #f4a261;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background-color: var(--bege);
+      background-image: radial-gradient(#e8cda7 1px, transparent 1px);
+      background-size: 18px 18px;
+      color: var(--texto);
+    }
+
+    header {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: linear-gradient(135deg, #741313 0%, var(--vermelho-escuro) 45%, var(--vermelho) 100%);
+      color: white;
+      text-align: left;
+      padding: 20px 40px;
+      box-shadow: 0 8px 24px rgba(86, 28, 12, .25);
+    }
+
+    .header-title {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    header::before,
+    header::after {
+      content: "🍕";
+      position: absolute;
+      font-size: 7rem;
+      opacity: .12;
+      transform: rotate(-18deg);
+    }
+
+    header::before { left: 7%; top: 12px; }
+    header::after { right: 7%; bottom: -18px; transform: rotate(18deg); }
+
+    header h1,
+    header p { position: relative; z-index: 1; }
+
+    header h1::after {
+      content: "✦  FEITO COM CARINHO  ✦";
+      display: block;
+      margin-top: 12px;
+      color: #ffd166;
+      font: bold .68rem Arial, sans-serif;
+      letter-spacing: 3px;
+    }
+
+    header h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+    }
+
+    header p {
+      margin: 0;
+      font-size: 1.05rem;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 34px auto 50px;
+      padding: 0 20px;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 30px;
+      padding: 10px;
+      background: rgba(255, 255, 255, .72);
+      border: 1px solid var(--borda);
+      border-radius: 18px;
+      box-shadow: 0 5px 15px rgba(96, 45, 18, .08);
+    }
+
+    .tab {
+      border: 1px solid transparent;
+      background: #fffaf2;
+      color: var(--texto);
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s ease;
+      font-family: Arial, sans-serif;
+    }
+
+    .tab.active,
+    .tab:hover {
+      background: var(--vermelho);
+      color: white;
+      box-shadow: 0 4px 10px rgba(214, 40, 40, .25);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      background: var(--branco);
+      border: 1px solid var(--borda);
+      border-radius: 18px 18px 12px 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(96, 45, 18, .12);
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+      background: #ddd;
+      border-bottom: 4px solid var(--dourado);
+    }
+
+    .content {
+      padding: 16px;
+    }
+
+    .content h3 {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+      color: var(--vermelho-escuro);
+    }
+
+    .content p {
+      margin: 0 0 12px;
+      color: var(--cinza);
+      line-height: 1.5;
+      min-height: 42px;
+    }
+
+    .price {
+      display: inline-block;
+      font-weight: bold;
+      color: var(--vermelho);
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      background: var(--vermelho);
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s ease;
+      font-family: Arial, sans-serif;
+    }
+
+    .btn:hover {
+      background: var(--vermelho-escuro);
+    }
+
+    .cart-link {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 10px 18px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .btn:focus-visible,
+    .tab:focus-visible {
+      outline: 3px solid #ffb703;
+      outline-offset: 3px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .bottom-action {
+      display: flex;
+      justify-content: center;
+      margin: 28px 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-title">
+      <h1>🍕 Pizza Hub</h1>
+      <p>Cardápio refinado por categoria</p>
+    </div>
+    <a class="cart-link" href="cardapio-4-sabores-corrigido.html">Escolher Seu Pedido</a>
+  </header>
+
+  <main class="container">
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-category="todos">Todos</button>
+      <button class="tab" data-category="pizza">🍕 Pizza</button>
+      <button class="tab" data-category="esfirra">🥟 Esfirra</button>
+      <button class="tab" data-category="maionese">🥫 Maionese</button>
+      <button class="tab" data-category="bebidas">🥤 Bebidas</button>
+      <button class="tab" data-category="borda">🧀 Borda</button>
+    </div>
+
+    <section class="grid" id="menu"></section>
+  </main>
+
+  <div class="bottom-action">
+    <a class="btn" href="cardapio-4-sabores-corrigido.html">Escolher Seu Pedido</a>
+  </div>
+
+  <script>
+    const items = [
+      {
+        name: "Pizza Hub",
+        category: "pizza",
+        desc: "Pizza especial da casa, preparada com ingredientes selecionados.",
+        image: "https://lh3.googleusercontent.com/d/1yTs5rKEbmDQCqGrSbVyp1d7GLk7OMStb=w800"
+      },
+      {
+        name: "Pizza Card",
+        category: "pizza",
+        desc: "Mussarela, presunto, ovos, cebola e azeitona.",
+        image: "https://lh3.googleusercontent.com/d/1Fv3rAKuH07KQNYvMfZ9D1Ps1pP2OY7Zo=w800"
+      },
+      {
+        name: "Maionese Especial",
+        category: "maionese",
+        desc: "Maionesse Temperada, Cremosa com um toque especial.",
+        image: "https://lh3.googleusercontent.com/d/1vdVdmEXgb9RqqZOvysara2HYmF7bPH3t=w800"
+      },
+      {
+        name: "Esfirras",
+        category: "esfirra",
+        desc: "Esfirras deliciosas recheadas com diferentes ingredientes.",
+        image: "https://lh3.googleusercontent.com/d/1Kia2h3HRFkoEx2rMgCP4-4avcfEVcDGv=w800"
+      },
+      {
+        name: "Borda Recheada",
+        category: "borda",
+        desc: "Bordas recheadas a sua escolha.",
+        image: "https://lh3.googleusercontent.com/d/1P0Wp06y1cq4djp4tIQ0FGw68My3UhgDQ=w800"
+      },
+      {
+        name: "Bebidas",
+        category: "bebidas",
+        desc: "Área de bebidas.",
+        image: "https://lh3.googleusercontent.com/d/1bD4kTRZxrN_cDGmF4QtAvVro3Fqcpm6v=w800"
+      },
+      {
+        name: "Bebidas Ao Copo",
+        category: "bebidas",
+        desc: "Bebidas servidas ao copo.",
+        image: "https://lh3.googleusercontent.com/d/1rEIeYdQGgeNjJYW_qixQ1a5y4D3hbeTo=w800"
+      },
+    ];
+
+    const menu = document.getElementById("menu");
+    const tabs = document.querySelectorAll(".tab");
+    const cartCount = document.getElementById("cart-count");
+
+    function getCarrinho() {
+      const atual = localStorage.getItem("carrinho");
+      if (!atual) {
+        const legado = localStorage.getItem("cart");
+        if (legado) {
+          localStorage.setItem("carrinho", legado);
+          localStorage.removeItem("cart");
+          return JSON.parse(legado);
+        }
+        return [];
+      }
+      try { return JSON.parse(atual); } catch { return []; }
+    }
+
+    function atualizarContador() {
+      const carrinho = getCarrinho();
+      const total = carrinho.reduce((soma, item) => soma + Number(item.quantidade || 1), 0);
+      if (cartCount) cartCount.textContent = total;
+    }
+
+    function render(category = "todos") {
+      const filtered = category === "todos"
+        ? items
+        : items.filter(item => item.category === category);
+
+      menu.innerHTML = filtered.map(item => `
+        <article class="card">
+          <img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.src='https://placehold.co/800x500/eee/666?text=Imagem+indispon%C3%ADvel'">
+          <div class="content">
+            <h3>${item.name}</h3>
+            <p>${item.desc || "Confira esta opção deliciosa da Pizza Hub."}</p>
+            <a class="btn" href="${item.image}" target="_blank" rel="noopener">Amplificar Imagem</a>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        tabs.forEach(btn => btn.classList.remove("active"));
+        tab.classList.add("active");
+        render(tab.dataset.category);
+      });
+    });
+
+    atualizarContador();
+    render();
+  </script>
+</body>
+</html>
